@@ -16,6 +16,7 @@ class Users extends Migration {
             $table->increments('id');
             $table->string('username')->nullable(false);
             $table->string('password')->nullable(false);
+            $table->rememberToken();
 
             $table->unique('username');
         });

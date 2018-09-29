@@ -11,6 +11,16 @@
 |
 */
 
+Auth::routes();
+
 Route::get('/', 'AppController@home');
 
-Route::get('/home', 'AppController@home');
+Route::get('/home', 'AppController@home')->name('home');
+
+Route::get('/logout', 'AppController@logout')->name('logout');
+
+Route::middleware('auth')->group(function(){
+
+    Route::get('/test', 'AppController@home');
+
+});
