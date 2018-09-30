@@ -13,6 +13,12 @@ class AppController extends Controller {
 
     }//home
 
+    public function treeview(){
+
+        return view('treeview');
+
+    }//treeview
+
     public function logout(){
 
         Auth::logout();

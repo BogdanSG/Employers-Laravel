@@ -10,4 +10,10 @@ class Employee extends Model {
     protected $primaryKey = 'EmployeeID';
     public $timestamps = false;
 
+    public function position(){
+
+        return $this->hasOne('App\Models\Position', 'PositionID', 'PositionID');
+
+    }//positions
+
 }//Employee

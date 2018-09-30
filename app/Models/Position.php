@@ -10,4 +10,10 @@ class Position extends Model {
     protected $primaryKey = 'PositionID';
     public $timestamps = false;
 
+    public function employee(){
+
+        return $this->belongsTo('App\Models\Employee', 'PositionID', 'PositionID');
+
+    }//employee
+
 }//Position

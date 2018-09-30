@@ -19,8 +19,8 @@ Route::get('/home', 'AppController@home')->name('home');
 
 Route::get('/logout', 'AppController@logout')->name('logout');
 
-Route::middleware('auth')->group(function(){
+Route::get('/treeview', 'AppController@treeview')->name('treeview');
 
-    Route::get('/test', 'AppController@home');
+Route::group(['middleware' => ['auth']], function(){
 
 });
