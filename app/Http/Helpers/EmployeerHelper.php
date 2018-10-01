@@ -53,4 +53,19 @@ class EmployeerHelper {
 
     }//getTreeEmployee
 
+    public static function getFullEmployee($EmployeeID){
+
+        if($EmployeeID){
+
+            return Employee::with('position')->with('employeeimg')->with('chief')->find($EmployeeID);
+
+        }//if
+        else{
+
+            return null;
+
+        }//else
+
+    }//getFullEmployee
+
 }//EmployeerHelper

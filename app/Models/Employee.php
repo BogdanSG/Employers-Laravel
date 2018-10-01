@@ -16,4 +16,16 @@ class Employee extends Model {
 
     }//positions
 
+    public function chief(){
+
+        return $this->hasOne('App\Models\Employee', 'EmployeeID', 'ChiefID');
+
+    }//positions
+
+    public function employeeimg(){
+
+        return $this->hasOne('App\Models\EmployeeImg', 'EmployeeImgID', 'EmployeeImgID');
+
+    }//positions
+
 }//Employee

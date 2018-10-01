@@ -56,6 +56,17 @@ jQuery(function ($) {
         },
     ];
     $("#treeview").shieldTreeView({
-        dataSource: data
+        dataSource: data,
+        events: {
+            select: function (e) {
+
+                if(e.item.data){
+
+                    window.location.href = `/single-employee/${e.item.data}`
+
+                }//if
+
+            },
+        }
     });
 });

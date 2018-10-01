@@ -21,6 +21,8 @@ Route::get('/logout', 'AppController@logout')->name('logout');
 
 Route::get('/treeview', 'AppController@treeview')->name('treeview');
 
+Route::get('/single-employee/{id}', 'AppController@singleEmployee');
+
 Route::group(['middleware' => ['auth']], function(){
 
 });

@@ -10,4 +10,10 @@ class EmployeeImg extends Model {
     protected $primaryKey = 'EmployeeImgID';
     public $timestamps = false;
 
+    public function employee(){
+
+        return $this->belongsTo('App\Models\Employee', 'EmployeeImgID', 'EmployeeImgID');
+
+    }//employee
+
 }//EmployeeImg
