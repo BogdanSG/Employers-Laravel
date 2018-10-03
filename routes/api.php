@@ -14,3 +14,5 @@ use Illuminate\Http\Request;
 */
 
 Route::post('/tree-employee', 'Api\ApiController@treeEmployee');
+
+Route::post('/new-employee-position-chief', 'Api\ApiController@newEmployeePositionChief');

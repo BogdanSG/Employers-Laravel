@@ -68,4 +68,115 @@ class EmployeerHelper {
 
     }//getFullEmployee
 
+    public static function deleteEmployee($EmployeeID){
+
+        if($EmployeeID){
+
+            $employee = Employee::find($EmployeeID);
+
+            if($employee){
+
+                $EmployeeImgID = $employee->EmployeeImgID;
+
+                DB::table('employees')->where('EmployeeID', '=', $EmployeeID)->delete();
+
+                if($EmployeeImgID){
+
+                    DB::table('employee_imgs')->where('EmployeeImgID', '=', $EmployeeImgID)->delete();
+
+                }//if
+
+                return true;
+
+            }//if
+
+        }//if
+
+        return false;
+
+    }//deleteEmployee
+
+    public static function createOrUpdateImg($EmployeeID, $ImgName){
+
+        if($EmployeeID && $ImgName){
+
+            $employee = Employee::find($EmployeeID);
+
+            if($employee){
+
+                $EmployeeImgID = $employee->EmployeeImgID;
+
+                if($EmployeeImgID){
+
+                    DB::table('employee_imgs')->where('EmployeeImgID', '=', $EmployeeImgID)->update(['ImgName' => $ImgName]);
+
+                }//if
+                else{
+
+                    $EmployeeImgID = DB::table('employee_imgs')->insertGetId(['ImgName' => $ImgName]);
+
+                    DB::table('employees')->where('EmployeeID', '=', $EmployeeID)->update(['EmployeeImgID' => $EmployeeImgID]);
+
+                }//else
+
+                return $EmployeeImgID;
+
+            }//if
+
+        }//if
+
+        return null;
+
+    }//createOrUpdateImg
+
+    public static function ChangeChief($EmployeeID){
+
+        $Employees = Employee::where('ChiefID', '=', $EmployeeID)->get(['EmployeeID']);
+
+        if(!$Employees){
+
+            return false;
+
+        }//if
+        else if(count($Employees) == 0){
+
+            return true;
+
+        }//else if
+
+        $Employee = Employee::find($EmployeeID);
+
+        if(!$Employee){
+
+            return false;
+
+        }//if
+
+        if(count($Employees) > 0){
+
+            $ChiefsIds = Employee::where('PositionID', '=', $Employee->PositionID)->get(['EmployeeID']);
+
+            $EmployeesLength = count($Employees);
+            $ChiefsIdsLength = count($ChiefsIds);
+
+            for($i = 0; $i < $EmployeesLength; $i++){
+
+                do {
+
+                    $RandomChief = $ChiefsIds[rand(0, $ChiefsIdsLength - 1)]->EmployeeID;
+
+                } while ($EmployeeID == $RandomChief);
+
+                DB::table('employees')->where('EmployeeID', '=', $Employees[$i]->EmployeeID)->update(['ChiefID' => $RandomChief]);
+
+            }//for
+
+            return true;
+
+        }//if
+
+        return false;
+
+    }//ChangeChief
+
 }//EmployeerHelper

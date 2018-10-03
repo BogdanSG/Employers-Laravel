@@ -25,4 +25,8 @@ Route::get('/single-employee/{id}', 'AppController@singleEmployee');
 
 Route::group(['middleware' => ['auth']], function(){
 
+    Route::post('/update-employee', 'AppController@updateEmployee')->name('update-employee');
+
+    Route::post('/delete-employee', 'AppController@deleteEmployee')->name('delete-employee');
+
 });
