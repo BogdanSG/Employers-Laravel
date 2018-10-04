@@ -1,4 +1,4 @@
-$( document ).ready(function () {
+$(document).ready(function () {
 
     let FirstName = $('#FirstName')[0];
     let LastName = $('#LastName')[0];

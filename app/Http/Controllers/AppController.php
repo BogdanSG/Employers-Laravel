@@ -51,6 +51,37 @@ class AppController extends Controller {
 
     }//singleEmployee
 
+    public function list(){
+
+        $sort = [
+            'EmployeeID',
+            'FirstName',
+            'LastName',
+            'SurName',
+            'Salary',
+            'Position',
+            'EmploymentDate',
+        ];
+
+        $limit = [
+            10,
+            25,
+            50,
+            100
+        ];
+
+        $search = [
+            'EmployeeID',
+            'FirstName',
+            'LastName',
+            'SurName',
+            'Salary',
+        ];
+
+        return view('list', ['sort' => $sort, 'search' => $search,'limit' => $limit]);
+
+    }//list
+
     public function updateEmployee(Request $request){
 
         $EmployeeID = $request->get('id');
@@ -117,11 +148,19 @@ class AppController extends Controller {
 
                         Storage::disk('public_img_employees')->putFileAs('/', $file, $NewFileName);
 
-                        $EmployeeImgID = EmployeerHelper::createOrUpdateImg($EmployeeID, $NewFileName);
+                        $files = Storage::disk('public_img_employees')->allFiles();
 
-                        if($EmployeeImgID){
+                        Storage::disk('public')->putFileAs('/', $file, $NewFileName);
 
-                            $files = Storage::disk('public_img_employees')->allFiles();
+                        $allowedMimeTypes = ['image/jpeg','image/gif','image/png','image/bmp','image/svg+xml'];
+                        $contentType = mime_content_type(Storage::disk('public_img_employees')->path($NewFileName));
+
+                        if(!in_array($contentType, $allowedMimeTypes)){
+
+                            $error = 'File is not an image';
+
+                        }//if
+                        else{
 
                             foreach ($files as $f) {
 
@@ -135,7 +174,18 @@ class AppController extends Controller {
 
                             Storage::disk('public_img_employees')->putFileAs('/', $file, $NewFileName);
 
-                        }//if
+                            $EmployeeImgID = EmployeerHelper::createOrUpdateImg($EmployeeID, $NewFileName);
+
+                            if(!$EmployeeImgID){
+
+                                Storage::disk('public_img_employees')->delete($NewFileName);
+                                $error = 'Create file error';
+
+                            }//if
+
+                        }//else
+
+                        Storage::disk('public')->delete($NewFileName);
 
                     }//else
 

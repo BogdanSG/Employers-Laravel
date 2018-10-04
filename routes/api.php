@@ -13,6 +13,10 @@ use Illuminate\Http\Request;
 |
 */
 
+//Для Api не подойдет обычная сессионная авторизация
+
 Route::post('/tree-employee', 'Api\ApiController@treeEmployee');
 
 Route::post('/new-employee-position-chief', 'Api\ApiController@newEmployeePositionChief');
+
+Route::post('/employee-list', 'Api\ApiController@employeeList');

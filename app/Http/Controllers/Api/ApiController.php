@@ -46,4 +46,36 @@ class ApiController extends Controller {
 
     }//newEmployeePositionChief
 
+    public function employeeList(Request $request){
+
+        $offset = $request->get('offset');
+        $limit = $request->get('limit');
+        $orderBy = $request->get('orderBy');
+        $sort = $request->get('sort');
+        $search = $request->get('search');
+        $searchValue = $request->get('searchValue');
+
+        $employees = Employee::with('position')->with('employeeimg');
+
+        if($search && $searchValue){
+
+            if($search === 'FirstName' || $search === 'LastName' || $search === 'SurName'){
+
+                $employees = $employees->where($search, 'LIKE', "${searchValue}%");
+
+            }//if
+            else{
+
+                $employees = $employees->where($search, '=', $searchValue);
+
+            }//else
+
+        }//if
+
+        $employees = $employees->orderBy($orderBy, $sort)->offset($offset)->limit($limit)->get();
+
+        return response()->json($employees);
+
+    }//employeeList
+
 }//ApiController

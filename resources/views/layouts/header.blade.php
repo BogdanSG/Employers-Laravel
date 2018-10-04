@@ -7,11 +7,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item" routerLinkActive="active">
+                <li class="nav-item {{ Request::path() == 'treeview' ? 'active' : '' }}">
                     <a class="nav-link" href="{{route('treeview')}}">TreeView <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item" routerLinkActive="active">
-                    <a class="nav-link" href="/list">List</a>
+                <li class="nav-item {{ Request::path() == 'list' ? 'active' : '' }}">
+                    <a class="nav-link" href="{{route('list')}}">List</a>
                 </li>
             </ul>
             <form class="form-inline mt-2 mt-md-0">

@@ -29,4 +29,7 @@ Route::group(['middleware' => ['auth']], function(){
 
     Route::post('/delete-employee', 'AppController@deleteEmployee')->name('delete-employee');
 
+    Route::get('/list', 'AppController@list')->name('list');
+
+
 });
