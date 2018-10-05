@@ -12,7 +12,7 @@ class RegexHelper {
 
     public static function EmployeeDate(){
 
-        return '/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/mi';
+        return '/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}){0,1}$/mi';
 
     }//EmployeeDate
 

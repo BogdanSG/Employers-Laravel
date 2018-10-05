@@ -24,11 +24,11 @@ class AppController extends Controller {
 
     public function treeview(){
 
-        return view('treeview');
+        return view('treeview', ['success' => session('success'), 'error' => session('error')]);
 
     }//treeview
 
-    public function singleEmployee($EmployeeID, $success = null, $error = null){
+    public function singleEmployee($EmployeeID){
 
         $employee = EmployeerHelper::getFullEmployee($EmployeeID);
 
@@ -127,7 +127,7 @@ class AppController extends Controller {
 
             $employee = EmployeerHelper::getFullEmployee($EmployeeID);
 
-            if($employee){
+            if(!$error && $employee){
 
                 $EmployeeImgID = $employee->EmployeeImgID;
 
@@ -193,7 +193,7 @@ class AppController extends Controller {
 
             }//if
 
-            if($ChiefID){
+            if(!$error && $ChiefID){
 
                 if($ChiefID == $EmployeeID){
 
@@ -232,11 +232,15 @@ class AppController extends Controller {
 
             if($employee){
 
-                if($employee->PositionID != $PositionID){
+                if(!$error){
 
-                    if(!EmployeerHelper::ChangeChief($EmployeeID)){
+                    if($employee->PositionID != $PositionID){
 
-                        $error = 'Change chief error';
+                        if(!EmployeerHelper::ChangeChief($EmployeeID)){
+
+                            $error = 'Change chief error';
+
+                        }//if
 
                     }//if
 
@@ -306,6 +310,77 @@ class AppController extends Controller {
         return redirect('single-employee/'.$EmployeeID)->with( [ 'error' => $error ] );
 
     }//deleteEmployee
+
+    public function changeChief(Request $request){
+
+        $EmployeeID = $request->get('EmployeeID');
+        $ChiefID = $request->get('ChiefID');
+        $error = null;
+        $success = null;
+        $PositionID = 1;
+
+        if($EmployeeID && $ChiefID){
+
+            if($ChiefID == $EmployeeID){
+
+                $error = 'Employee can not be yourself chief';
+
+            }//if
+            else{
+
+                $chief = Employee::find($ChiefID);
+
+                if(!$chief){
+
+                    $error = 'Chief not found';
+
+                }//if
+                else{
+
+                    $positionID = $chief->PositionID;
+
+                    if($positionID == 5){
+
+                        $error = 'Worker can not be Chief';
+
+                    }//if
+                    else{
+
+                        $PositionID = $positionID + 1;
+
+                        if(EmployeerHelper::ChangeChief($EmployeeID)){
+
+                            DB::table('employees')->where('EmployeeID', '=', $EmployeeID)->update(['ChiefID' => $ChiefID, 'PositionID' => $PositionID]);
+
+                        }//if
+                        else{
+
+                            $error = 'Change Chief Error';
+
+                        }//else
+
+                    }//else
+
+                }//esle
+
+            }//else
+
+        }//if
+        else{
+
+            $error = 'Incorrect data';
+
+        }//else
+
+        if(!$error){
+
+            $success = 'Chef successfully changed';
+
+        }//if
+
+        return redirect()->route('treeview')->with( [ 'success' => $success, 'error' => $error ] );
+
+    }//changeChief
 
     public function logout(){
 
