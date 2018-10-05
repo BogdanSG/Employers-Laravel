@@ -9,6 +9,8 @@ $(document).ready(function () {
     let NextButton = $('#NextButton')[0];
     let Table = $('#table')[0];
 
+    let Api = $('meta[name=api_token]').attr("content");
+
     let Limit = 10;
     let Offset = 0;
     let Sort = 'EmployeeID';
@@ -141,34 +143,36 @@ $(document).ready(function () {
 
     function getEmployeeList() {
 
-        $.ajax({
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify({
-                offset: Offset,
-                limit: Limit,
-                orderBy: Sort,
-                sort: SortType,
-                search: Search,
-                searchValue: SearchData,
-            }),
-            url: "/api/employee-list",
-            type: 'POST'
-        }).done(function (data) {
+        if(Api){
 
-            if(Table){
+            $.ajax({
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({
+                    offset: Offset,
+                    limit: Limit,
+                    orderBy: Sort,
+                    sort: SortType,
+                    search: Search,
+                    searchValue: SearchData,
+                }),
+                url: `/api/employee-list/?api_token=${Api}`,
+                type: 'POST'
+            }).done(function (data) {
 
-                clearChild(Table);
+                if(Table){
 
-                if(data && data.length > 0){
+                    clearChild(Table);
 
-                    employeeList = data;
+                    if(data && data.length > 0){
 
-                    let htmlTable = '';
+                        employeeList = data;
 
-                    data.forEach(employee => {
+                        let htmlTable = '';
 
-                        htmlTable += `<tr>
+                        data.forEach(employee => {
+
+                            htmlTable += `<tr>
                                         <th scope="row"><a href="/single-employee/${employee.EmployeeID}">${employee.EmployeeID}</a></th>
                                         <td><img src="${employee.employeeimg ? `/img/employees/${employee.employeeimg.ImgName}` : '/img/user.png'}" class="rounded mx-auto d-block" height="40"></td>
                                         <td>${employee.FirstName}</td>
@@ -180,29 +184,31 @@ $(document).ready(function () {
                                         <td>${getNormalDate(employee.EmploymentDate)}</td>
                                       </tr>`;
 
-                    });
+                        });
 
-                    Table.innerHTML = htmlTable;
+                        Table.innerHTML = htmlTable;
+
+                    }//if
+                    else {
+
+                        employeeList = [];
+
+                    }//else
 
                 }//if
-                else {
 
+            }).fail(function () {
+
+                if(Table){
+
+                    clearChild(Table);
                     employeeList = [];
 
-                }//else
+                }//if
 
-            }//if
+            });
 
-        }).fail(function () {
-
-            if(Table){
-
-                clearChild(Table);
-                employeeList = [];
-
-            }//if
-
-        });
+        }//if
 
     }//getEmployeeList
 

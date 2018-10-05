@@ -12,38 +12,59 @@ $(document).ready(function () {
     let Chief = $('#Chief')[0];
     let Position = $('#Position')[0];
 
+    let Api = $('meta[name=api_token]').attr("content");
+
     let EditButton = $('#Edit')[0];
 
     if(ChiefID){
 
         ChiefID.addEventListener('input', function (event) {
 
-            $.ajax({
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify({
-                    id: event.srcElement.value
-                }),
-                url: "/api/new-employee-position-chief",
-                type: 'POST'
-            }).done(function (data) {
+            if(Api){
 
-                if(data.Chief && data.Position){
+                $.ajax({
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        id: event.srcElement.value
+                    }),
+                    url: `/api/new-employee-position-chief/?api_token=${Api}`,
+                    type: 'POST'
+                }).done(function (data) {
 
-                    if(Chief){
+                    if(data.Chief && data.Position){
 
-                        Chief.innerHTML = `${data.Chief.FirstName} ${data.Chief.LastName} ${data.Chief.SurName}`;
+                        if(Chief){
+
+                            Chief.innerHTML = `${data.Chief.FirstName} ${data.Chief.LastName} ${data.Chief.SurName}`;
+
+                        }//if
+
+                        if(Position){
+
+                            Position.innerHTML = data.Position;
+
+                        }//if
 
                     }//if
+                    else {
 
-                    if(Position){
+                        if(Chief){
 
-                        Position.innerHTML = data.Position;
+                            Chief.innerHTML = '';
 
-                    }//if
+                        }//if
 
-                }//if
-                else {
+                        if(Position){
+
+                            Position.innerHTML = '';
+
+                        }//if
+
+
+                    }//else
+
+                }).fail(function () {
 
                     if(Chief){
 
@@ -57,24 +78,9 @@ $(document).ready(function () {
 
                     }//if
 
+                });
 
-                }//else
-
-            }).fail(function () {
-
-                if(Chief){
-
-                    Chief.innerHTML = '';
-
-                }//if
-
-                if(Position){
-
-                    Position.innerHTML = '';
-
-                }//if
-
-            });
+            }//Api
 
         });
 

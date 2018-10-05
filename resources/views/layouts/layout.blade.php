@@ -5,6 +5,9 @@
     <title>Employers Laravel</title>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @if(Auth::check())
+        <meta name="api_token" content="{{ Auth::user()->api_token }}">
+    @endif
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">

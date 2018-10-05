@@ -16,9 +16,11 @@ class Users extends Migration {
             $table->increments('id');
             $table->string('username')->nullable(false);
             $table->string('password')->nullable(false);
+            $table->string('api_token', 60)->nullable(false);
             $table->rememberToken();
 
             $table->unique('username');
+            $table->unique('api_token');
         });
 
     }//up
